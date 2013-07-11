@@ -1,10 +1,10 @@
 swipl-win:
 
-    a script that setup and run a fairly complete replacement of <b>swipl-win.exe</b>.
+    a script that setup and run a fairly complete replacement of swipl-win.exe.
 
 features:
 
-    the script, named <b>swipl-win.lp</b>, introduces the *new* Prolog file extension,
+    the script, named swipl-win.lp, introduces the *new* Prolog file extension,
     proposed on SWI-Prolog mailing list by Jose F. Morales
     (see <https://lists.iai.uni-bonn.de/pipermail/swi-prolog/2013/010301.html>).
 
