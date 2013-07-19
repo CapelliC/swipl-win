@@ -16,16 +16,16 @@
 console_menu([file-    [consult + query_file,
 			edit + query_file,
 			new + query_file,
-			-,
+                        --,
                         reload * (user:make),
-			-,
+                        --,
 			navigator + query_uri,
-			-,
+                        --,
                         exit * (pqConsole:quit_console)],
 	      edit -   [copy,
 			paste],
               settings-[font * (pqConsole:select_font),
-			-,
+                        --,
 			user_init_file,
 			gui_preferences],
 	      run-     [interrupt,
@@ -35,12 +35,12 @@ console_menu([file-    [consult + query_file,
                         monitor_threads,
                         debug_messages,
 			cross_referencer,
-			-,
+                        --,
 			graphical_debugger],
 	      help-    [about,
                         console_help,
 			browse_pldoc,
-			-,
+                        --,
 			swi_prolog_website,
 			manual,
 			faq,
@@ -48,9 +48,9 @@ console_menu([file-    [consult + query_file,
 			mailing_list,
 			download,
 			extension_packs,
-			-,
+                        --,
 			xpce_gui_manual,
-			-,
+                        --,
 			submit_bug_report]
 	     ]).
 
@@ -85,8 +85,8 @@ make_first_upcase(Low, Up) :-
 	atom_codes(Up, [UpFirst|Cs]).
 
 setup_submenu([], _Menu, _Accel).
-setup_submenu([-|Commands], Menu, Accel) :-
-	win_insert_menu_item(Menu, -, -, -),
+setup_submenu([--|Commands], Menu, Accel) :-
+        win_insert_menu_item(Menu, --, -, -),
 	setup_submenu(Commands, Menu, Accel).
 setup_submenu([Command|Commands], Menu, Accel) :-
 	(   Command = LabelLo + ActionP
