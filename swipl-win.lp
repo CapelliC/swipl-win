@@ -114,6 +114,7 @@ win_insert_menu_item(Pulldown, Label, Before, Goal) :- writeln(win_insert_menu_i
 %%	consult_query_file
 %
 %	issue file selection and simpy consult it.
+%
 consult_query_file :-
 	pqConsole:getOpenFileName('Consult File', _, 'Prolog Source (*.lp *.pl *.pro)', File),
 	consult(File).

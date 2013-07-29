@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>swipl-win.lp</file>
+        <file>swipl.png</file>
     </qresource>
 </RCC>
