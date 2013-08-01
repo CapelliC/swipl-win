@@ -19,10 +19,20 @@ TEMPLATE = app
 # please, not obsolete compiler
 QMAKE_CXXFLAGS += -std=c++0x
 
+# provide appropriate linking mode for
+# static compilation of pqConsole source files
+DEFINES += PQCONSOLE_STATIC
+
 unix {
     # because SWI-Prolog is built from source
     CONFIG += link_pkgconfig
     PKGCONFIG += swipl
+}
+
+windows {
+    SwiPl = "C:\Program Files\pl"
+    INCLUDEPATH += $$SwiPl\include
+    LIBS += -L$$SwiPl\bin -lswipl
 }
 
 SOURCES += main.cpp \
