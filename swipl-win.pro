@@ -23,6 +23,10 @@ QMAKE_CXXFLAGS += -std=c++0x
 # static compilation of pqConsole source files
 DEFINES += PQCONSOLE_STATIC
 
+# remove old defines in foreign predicates params
+# due to conflicting Qt5 template arguments
+DEFINES += PL_SAFE_ARG_MACROS
+
 unix {
     # because SWI-Prolog is built from source
     CONFIG += link_pkgconfig
