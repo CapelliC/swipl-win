@@ -27,6 +27,10 @@ DEFINES += PQCONSOLE_STATIC
 # due to conflicting Qt5 template arguments
 DEFINES += PL_SAFE_ARG_MACROS
 
+# QPlainTextEdit vs QTextEdit : faster lightweight format
+# TBD evaluate timing difference
+DEFINES += PQCONSOLE_NO_HTML
+
 unix {
     # because SWI-Prolog is built from source
     CONFIG += link_pkgconfig
@@ -37,6 +41,12 @@ windows {
     SwiPl = "C:\Program Files\pl"
     INCLUDEPATH += $$SwiPl\include
     LIBS += -L$$SwiPl\bin -lswipl
+}
+
+mingw {
+    SWIPL_BASE  = "../../"
+    INCLUDEPATH += $$SWIPL_BASE/include ../cpp
+    LIBS += -L$$SWIPL_BASE/lib/x64-win64 -lswipl
 }
 
 SOURCES += main.cpp \
@@ -55,9 +65,9 @@ RESOURCES += \
     swipl-win.qrc
 
 OTHER_FILES += \
-    swipl-win.lp \
     README.md \
-    ../pqConsole/swipl.png
+    ../pqConsole/swipl.png \
+    MINGW.md
 
 HEADERS += \
     ../pqConsole/SwiPrologEngine.h \
