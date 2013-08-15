@@ -23,22 +23,22 @@
 #include <QApplication>
 #include "pqMainWindow.h"
 #include <QFile>
+#include <QDebug>
 #include <QTextStream>
+
+/* Note that QApplication is created using new to avoid destruction
+   on program shutdown.  Destroying causes a crash in XCloseDisplay()
+   if xpce was started.
+*/
 
 int main(int argc, char *argv[]) {
 
-    QApplication a(argc, argv);
+    int rc;
+    QApplication *a = new QApplication(argc, argv);
     pqMainWindow w(argc, argv);
 
-    /* / run initialization script from resource
-    {   QFile f(":/swipl-win.lp");
-        if (f.open(f.ReadOnly)) {
-            QTextStream s(&f);
-            w.set_script("swipl-win", s.readAll());
-        }
-    }
-    */
-
     w.show();
-    return a.exec();
+    rc = a->exec();
+    qDebug() << "main loop finished";
+    return rc;
 }
