@@ -61,7 +61,8 @@ SOURCES += main.cpp \
     ../pqConsole/pqConsole.cpp \
     ../pqConsole/FlushOutputEvents.cpp \
     ../pqConsole/ConsoleEdit.cpp \
-    ../pqConsole/Completion.cpp
+    ../pqConsole/Completion.cpp \
+    swipl_win.cpp
 
 INCLUDEPATH += $$PWD/../pqConsole
 
@@ -84,4 +85,5 @@ HEADERS += \
     ../pqConsole/FlushOutputEvents.h \
     ../pqConsole/do_events.h \
     ../pqConsole/ConsoleEdit.h \
-    ../pqConsole/Completion.h
+    ../pqConsole/Completion.h \
+    swipl_win.h

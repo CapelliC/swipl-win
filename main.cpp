@@ -25,6 +25,71 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
+#include "swipl_win.h"
+
+static FILE *logfile;
+
+#if QT_VERSION < 0x050000
+
+static QtMsgHandler previous;
+
+static void logger(QtMsgType type, const char *msg)
+{
+    if (!logfile) {
+        if (previous)
+            previous(type, msg);
+        return;
+    }
+
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(logfile, "Debug: %s\n", msg);
+        break;
+    case QtWarningMsg:
+        fprintf(logfile, "Warning: %s\n", msg);
+        break;
+    case QtCriticalMsg:
+        fprintf(logfile, "Critical: %s\n", msg);
+        break;
+    case QtFatalMsg:
+        fprintf(logfile, "Fatal: %s\n", msg);
+        abort();
+    }
+
+    fflush(logfile);
+}
+
+#else
+
+static QtMessageHandler previous;
+static void logger(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    if (!logfile) {
+        if (previous)
+            previous(type, context, msg);
+        return;
+    }
+
+    QByteArray localMsg = msg.toLocal8Bit();
+    switch (type) {
+    case QtDebugMsg:
+        fprintf(logfile, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtWarningMsg:
+        fprintf(logfile, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtCriticalMsg:
+        fprintf(logfile, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        break;
+    case QtFatalMsg:
+        fprintf(logfile, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+        abort();
+    }
+
+    fflush(logfile);
+}
+
+#endif
 
 /* Note that QApplication is created using new to avoid destruction
    on program shutdown.  Destroying causes a crash in XCloseDisplay()
@@ -32,13 +97,15 @@
 */
 
 int main(int argc, char *argv[]) {
+    logfile = fopen("swipl-win.log", "w");
+#if QT_VERSION < 0x050000
+    previous = qInstallMsgHandler(logger);
+#else
+    previous = qInstallMessageHandler(logger);
+#endif
 
-    int rc;
-    QApplication *a = new QApplication(argc, argv);
-    pqMainWindow w(argc, argv);
-
-    w.show();
-    rc = a->exec();
-    qDebug() << "main loop finished";
+    auto a = new swipl_win(argc, argv);
+    int rc = a->exec();
+    qDebug() << "main loop finished" << rc;
     return rc;
 }
