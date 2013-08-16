@@ -101,12 +101,12 @@ int main(int argc, char *argv[]) {
 
     if ( (logname = getenv("SWIPL_LOGFILE")) ) {
         logfile = fopen(logname, "w");
-    }
 #if QT_VERSION < 0x050000
-    previous = qInstallMsgHandler(logger);
+        previous = qInstallMsgHandler(logger);
 #else
-    previous = qInstallMessageHandler(logger);
+        previous = qInstallMessageHandler(logger);
 #endif
+    }
 
     auto a = new swipl_win(argc, argv);
     int rc = a->exec();
