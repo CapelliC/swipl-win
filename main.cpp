@@ -97,7 +97,11 @@ static void logger(QtMsgType type, const QMessageLogContext &context, const QStr
 */
 
 int main(int argc, char *argv[]) {
-    logfile = fopen("swipl-win.log", "w");
+    const char *logname;
+
+    if ( (logname = getenv("SWIPL_LOGFILE")) ) {
+        logfile = fopen(logname, "w");
+    }
 #if QT_VERSION < 0x050000
     previous = qInstallMsgHandler(logger);
 #else
