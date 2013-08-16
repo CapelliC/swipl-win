@@ -21,6 +21,8 @@
 */
 
 #include "swipl_win.h"
+#include "SwiPrologEngine.h"
+#include "PREDICATE.h"
 #include <QFileOpenEvent>
 #include <QDebug>
 
@@ -35,8 +37,17 @@ swipl_win::swipl_win(int& argc, char **argv) :
 bool swipl_win::event(QEvent *event) {
     switch (event->type()) {
     case QEvent::FileOpen:
-        qDebug() << "FileOpen:" << static_cast<QFileOpenEvent *>(event)->file();
+      { QString name = static_cast<QFileOpenEvent *>(event)->file();
+
+	qDebug() << "FileOpen: " << name;
+        SwiPrologEngine::in_thread _it;
+	try {
+	    PlCall("prolog", "file_open_event", PlTermv(name.toStdWString().data()));
+	} catch(PlException e) {
+	    qDebug() << CCP(e);
+	}
         return true;
+      }
     default:
         return QApplication::event(event);
     }
