@@ -15,6 +15,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 macx {
     CONFIG += c++11
+    ICON = swipl.icns
 }
 
 TARGET = swipl-win
