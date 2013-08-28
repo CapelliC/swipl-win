@@ -12,5 +12,18 @@ features:
     it can be edited with some elementary syntax coloring, and get embedded
     with latest modifications in seamless way.
 
+history:
+
+    swipl-win has become officially a part of SWI-Prolog git repository,
+    and now benefits of the portable build process underling the system
+    (see http://www.swi-prolog.org/git/packages/swipl-win.git).
+ 
+    As a consequence, the architecture has changed radically: pqConsole
+    sources have been embedded in swipl-win, and the basic user interface
+    logic can be found in library(win_menu.pl).
+
+    This repository then is in a transitional stage, just showcasing an
+    alternative way to embed a SWI-Prolog user interface.
+
 author:  Carlo Capelli - Brescia 2013
 licence: LGPL v2.1
