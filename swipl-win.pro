@@ -72,7 +72,11 @@ SOURCES += main.cpp \
     FlushOutputEvents.cpp \
     ConsoleEdit.cpp \
     Completion.cpp \
-    swipl_win.cpp
+    swipl_win.cpp \
+    ParenMatching.cpp \
+    reflexive.cpp \
+    win_builtins.cpp \
+    plMiniSyntax.cpp
 
 RESOURCES += \
     swipl-win.qrc
@@ -93,4 +97,6 @@ HEADERS += \
     do_events.h \
     ConsoleEdit.h \
     Completion.h \
-    swipl_win.h
+    swipl_win.h \
+    ParenMatching.h \
+    plMiniSyntax.h

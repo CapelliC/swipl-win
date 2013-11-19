@@ -24,6 +24,11 @@
 #define PQCONSOLE_H
 
 #include "pqConsole_global.h"
+#include "ConsoleEdit.h"
+
+#include <QMetaObject>
+#include <QMetaProperty>
+#include <QMutex>
 
 /*!
   \mainpage
@@ -42,10 +47,44 @@
 class PQCONSOLESHARED_EXPORT pqConsole {
 public:
 
-    pqConsole();
-
     /*! Run a vanilla QMainWindow displaying SWI-Prolog console */
     int runDemo(int argc, char *argv[]);
+
+    /** open Prolog script with mini syntax support */
+    int showMiniSyntax(int argc, char *argv[]);
+
+#if 0
+    /** depth first search of widgets hierarchy, from application topLevelWidgets */
+    static QWidget *search_widget(std::function<bool(QWidget* w)> match);
+#endif
+
+    /** as noted by Kuba Ober, search_widget() isn't thread safe.
+      * Replaced by a list to be safely handled from ConsoleEdit.
+      */
+    static void addConsole(ConsoleEdit*);
+    static void removeConsole(ConsoleEdit*);
+
+    /** search widgets hierarchy looking for the first */
+    static ConsoleEdit *by_thread();
+
+    /** search widgets hierarchy looking for any ConsoleEdit */
+    static ConsoleEdit *peek_first();
+
+    /** unify a property of QObject */
+    static QString unify(const QMetaProperty& p, QObject *o, PlTerm v);
+
+    /** unify a property of QObject, seek by name */
+    static QString unify(const char* name, QObject *o, PlTerm v);
+
+    /** run in GUI thread */
+    static void gui_run(pfunc f);
+
+    /** saving history lines on exit is messed by PL_halt...*/
+    static QStringList last_history_lines;
+
+private:
+    static QList<ConsoleEdit*> consoles;
+    static QMutex consoles_sync;
 };
 
 #endif // PQCONSOLE_H

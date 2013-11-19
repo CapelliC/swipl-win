@@ -21,6 +21,7 @@
 */
 
 #include "Preferences.h"
+#include <QDebug>
 
 QList<QColor> Preferences::ANSI_sequences;
 
@@ -37,6 +38,7 @@ Preferences::Preferences(QObject *parent) :
     QSettings("SWI-Prolog", "pqConsole", parent)
 {
     console_font = value("console_font", QFont("courier", 12)).value<QFont>();
+
     wrapMode = static_cast<ConsoleEditBase::LineWrapMode>(value("wrapMode", ConsoleEditBase::WidgetWidth).toInt());
 
     console_out_fore = value("console_out_fore", 0).toInt();
@@ -77,7 +79,7 @@ Preferences::Preferences(QObject *parent) :
 
 /** save configured values
  */
-Preferences::~Preferences() {
+void Preferences::save() {
 
     #define SV(s) setValue(#s, s)
 
@@ -101,9 +103,22 @@ Preferences::~Preferences() {
 }
 
 void Preferences::loadGeometry(QString key, QWidget *w) {
+    w->restoreGeometry(value(key + "/geometry").toByteArray());
+}
+void Preferences::saveGeometry(QString key, QWidget *w) {
+    setValue(key + "/geometry", w->saveGeometry());
+}
+void Preferences::loadGeometry(QWidget *w) {
+    loadGeometry(w->metaObject()->className(), w);
+}
+void Preferences::saveGeometry(QWidget *w) {
+    saveGeometry(w->metaObject()->className(), w);
+}
+
+void Preferences::loadPosSizeState(QString key, QWidget *w) {
     beginGroup(key);
-    QPoint pos = value("pos", QPoint(200, 200)).toPoint();
-    QSize size = value("size", QSize(800, 600)).toSize();
+    QPoint pos = value("pos", QPoint(40, 30)).toPoint();
+    QSize size = value("size", QSize(400, 300)).toSize();
     int state = value("state", static_cast<int>(Qt::WindowNoState)).toInt();
     w->move(pos);
     w->resize(size);
@@ -111,16 +126,10 @@ void Preferences::loadGeometry(QString key, QWidget *w) {
     endGroup();
 }
 
-void Preferences::saveGeometry(QString key, QWidget *w) {
+void Preferences::savePosSizeState(QString key, QWidget *w) {
     beginGroup(key);
     setValue("pos", w->pos());
     setValue("size", w->size());
     setValue("state", static_cast<int>(w->windowState()));
     endGroup();
-}
-void Preferences::loadGeometry(QWidget *w) {
-    loadGeometry(w->metaObject()->className(), w);
-}
-void Preferences::saveGeometry(QWidget *w) {
-    saveGeometry(w->metaObject()->className(), w);
 }
