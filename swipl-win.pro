@@ -88,3 +88,5 @@ HEADERS += \
     ../pqConsole/ConsoleEdit.h \
     ../pqConsole/Completion.h \
     swipl_win.h
+
+# test commit
