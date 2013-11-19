@@ -14,8 +14,10 @@ QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 macx {
+    QT_CONFIG -= no-pkg-config
     CONFIG += c++11
     ICON = swipl.icns
+    QMAKE_MACOS_DEPLOYMENT_TARGET = 10.6
 }
 
 TARGET = swipl-win
@@ -36,6 +38,13 @@ DEFINES += PL_SAFE_ARG_MACROS
 # TBD evaluate timing difference
 DEFINES += PQCONSOLE_NO_HTML
 
+# reactive interface
+# TBD as above
+DEFINES += PQCONSOLE_BROWSER
+
+# disable message hoovering and feedback, leave to reactive HTML
+DEFINES += PQCONSOLE_HANDLE_HOOVERING
+
 unix {
     # because SWI-Prolog is built from source
     CONFIG += link_pkgconfig
@@ -55,38 +64,33 @@ mingw {
 }
 
 SOURCES += main.cpp \
-    ../pqConsole/SwiPrologEngine.cpp \
-    ../pqConsole/Swipl_IO.cpp \
-    ../pqConsole/Preferences.cpp \
-    ../pqConsole/pqMainWindow.cpp \
-    ../pqConsole/pqConsole.cpp \
-    ../pqConsole/FlushOutputEvents.cpp \
-    ../pqConsole/ConsoleEdit.cpp \
-    ../pqConsole/Completion.cpp \
+    SwiPrologEngine.cpp \
+    Swipl_IO.cpp \
+    Preferences.cpp \
+    pqMainWindow.cpp \
+    pqConsole.cpp \
+    FlushOutputEvents.cpp \
+    ConsoleEdit.cpp \
+    Completion.cpp \
     swipl_win.cpp
-
-INCLUDEPATH += $$PWD/../pqConsole
 
 RESOURCES += \
     swipl-win.qrc
 
 OTHER_FILES += \
     README.md \
-    ../pqConsole/swipl.png \
     MINGW.md
 
 HEADERS += \
-    ../pqConsole/SwiPrologEngine.h \
-    ../pqConsole/Swipl_IO.h \
-    ../pqConsole/Preferences.h \
-    ../pqConsole/PREDICATE.h \
-    ../pqConsole/pqMainWindow.h \
-    ../pqConsole/pqConsole_global.h \
-    ../pqConsole/pqConsole.h \
-    ../pqConsole/FlushOutputEvents.h \
-    ../pqConsole/do_events.h \
-    ../pqConsole/ConsoleEdit.h \
-    ../pqConsole/Completion.h \
+    SwiPrologEngine.h \
+    Swipl_IO.h \
+    Preferences.h \
+    PREDICATE.h \
+    pqMainWindow.h \
+    pqConsole_global.h \
+    pqConsole.h \
+    FlushOutputEvents.h \
+    do_events.h \
+    ConsoleEdit.h \
+    Completion.h \
     swipl_win.h
-
-# test commit
