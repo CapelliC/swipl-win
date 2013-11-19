@@ -1,29 +1,24 @@
+# A Qt-based portable console for SWI-Prolog
+
 swipl-win:
 
     a script that setup and run a fairly complete replacement of swipl-win.exe.
 
-features:
+pqConsole:
 
-    the script, named swipl-win.lp, introduces the *new* Prolog file extension,
-    proposed on SWI-Prolog mailing list by Jose F. Morales
-    (see <https://lists.iai.uni-bonn.de/pipermail/swi-prolog/2013/010301.html>).
+  a basic Console, running SWI-Prolog PlEngine in background,
+  presenting a QPlainTextEditor for user interface in foreground (GUI) thread.
 
-    The text is keept in Qt resource file, and after configuration of QtCreator,
-    it can be edited with some elementary syntax coloring, and get embedded
-    with latest modifications in seamless way.
+Features
 
-history:
-
-    swipl-win has become officially a part of SWI-Prolog git repository,
-    and now benefits of the portable build process underling the system
-    (see http://www.swi-prolog.org/git/packages/swipl-win.git).
- 
-    As a consequence, the architecture has changed radically: pqConsole
-    sources have been embedded in swipl-win, and the basic user interface
-    logic can be found in library(win_menu.pl).
-
-    This repository then is in a transitional stage, just showcasing an
-    alternative way to embed a SWI-Prolog user interface.
+ - handling of keyboard input specialized for Prolog REPL
+   and integration in TAB based multiwindow interfaces
+ - output text colouring (subset of ANSI terminal sequences)
+ - commands history
+ - completion interface
+ - swipl-win compatible API, allows menus to be added to top level widget,
+   and enable creating a console for each thread
+ - XPCE ready, allows reuse of current IDE components
 
 author:  Carlo Capelli - Brescia 2013
 licence: LGPL v2.1
