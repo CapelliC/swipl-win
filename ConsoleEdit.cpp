@@ -171,7 +171,6 @@ void ConsoleEdit::setup() {
 void ConsoleEdit::keyPressEvent(QKeyEvent *event) {
 
     using namespace Qt;
-    qDebug() << "keyPressEvent" << event;
 
     QTextCursor c = textCursor();
 
@@ -209,11 +208,6 @@ void ConsoleEdit::keyPressEvent(QKeyEvent *event) {
         accept = editable;
         break;
     case Key_Tab:
-        // there is a bug when QTextBrowser == ConsoleEditBase: trying to avoid discarding message
-        #if defined(PQCONSOLE_BROWSER)
-            event->ignore();
-            return;
-        #endif
         if (ctrl) {
             event->ignore(); // otherwise tab control get lost !
             return;
@@ -710,6 +704,19 @@ void ConsoleEdit::command_do() {
 /** handle tooltip from helpidx to display current cursor word synopsis
  */
 bool ConsoleEdit::event(QEvent *event) {
+
+#if defined(PQCONSOLE_BROWSER)
+    // there is a bug when QTextBrowser == ConsoleEditBase: trying to avoid discarding message
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *k = static_cast<QKeyEvent*>(event);
+        if (k->key() == Qt::Key_Tab) {
+            qDebug() << "ignore" << event->type();
+            event->ignore();
+            return true;
+        }
+    }
+#endif
+
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
         if (!last_tip.isEmpty())
@@ -720,6 +727,7 @@ bool ConsoleEdit::event(QEvent *event) {
         }
         return true;
     }
+
     return ConsoleEditBase::event(event);
 }
 
