@@ -26,12 +26,16 @@
 #include <QEvent>
 #include <QCompleter>
 
-#ifndef PQCONSOLE_NO_HTML
-    #include <QTextEdit>
-    typedef QTextEdit ConsoleEditBase;
-#elif PQCONSOLE_BROWSER
+// make this definition available in client projects
+#define PQCONSOLE_BROWSER
+//#define PQCONSOLE_TEXTEDIT
+
+#if defined(PQCONSOLE_BROWSER)
     #include <QTextBrowser>
     typedef QTextBrowser ConsoleEditBase;
+#elif defined(PQCONSOLE_TEXTEDIT)
+    #include <QTextEdit>
+    typedef QTextEdit ConsoleEditBase;
 #else
     #include <QPlainTextEdit>
     typedef QPlainTextEdit ConsoleEditBase;
@@ -39,6 +43,7 @@
 
 #include "SwiPrologEngine.h"
 #include "Completion.h"
+#include "ParenMatching.h"
 
 class Swipl_IO;
 
@@ -59,6 +64,9 @@ public:
 
     /** create in prolog thread - from win_open_console(), add to tabbed interface */
     ConsoleEdit(Swipl_IO* io);
+
+    /** handle consoles list */
+    virtual ~ConsoleEdit();
 
     /** push command on queue */
     bool command(QString text);
@@ -203,7 +211,7 @@ protected:
     void set_cursor_tip(QTextCursor c);
 
     /** attempt to track *where* to place outpout */
-    enum e_status { idle, attaching, wait_input, running, closing, eof };
+    enum e_status { idle, wait_input, running, closing, eof };
     e_status status;
     int promptPosition;
     bool is_tty;
@@ -227,6 +235,20 @@ protected:
 
     /** sense URL */
     virtual void setSource(const QUrl & name);
+
+    /** handle output reactively */
+    int parsedStart;
+
+    /** override QTextBrowser default, to get cursor working in output area */
+    void set_editable(bool allow);
+
+    /** replace references to source of error/warning with links */
+    void linkto_message_source();
+
+protected:
+
+    /** keep last matched pair */
+    ParenMatching::range pmatched;
 
 public slots:
 
@@ -260,6 +282,9 @@ protected slots:
     /** handle HREF (simpler is query_run(Target) */
     void anchorClicked(const QUrl &link);
 
+    /** highlight related 'symbols' on selection */
+    void selectionChanged();
+
 signals:
 
     /** issued to serve prompt */
@@ -267,6 +292,9 @@ signals:
 
     /** 3. attempt to run generic code inter threads */
     void sig_run_function(pfunc f);
+
+    /** notify SWI-Prolog has been initialized, ready to run */
+    void engine_ready();
 };
 
 #endif

@@ -40,7 +40,8 @@ DEFINES += PQCONSOLE_NO_HTML
 
 # reactive interface
 # TBD as above
-DEFINES += PQCONSOLE_BROWSER
+# moved where the class is defined
+# DEFINES += PQCONSOLE_BROWSER
 
 # disable message hoovering and feedback, leave to reactive HTML
 DEFINES += PQCONSOLE_HANDLE_HOOVERING
